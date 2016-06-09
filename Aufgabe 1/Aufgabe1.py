@@ -27,7 +27,7 @@ def findeRGB(bild,bildBW):
     for y in range(height):
         for x in range(width):
             pixel=bild[y,x]
-            if(pixel[0] != pixel[1] or pixel[0] != pixel[2] or pixel[1] != pixel[2]):
+            if(pixel[0] != pixel[1] or pixel[0] != pixel[2] or pixel[1] != pixel[2]): #Alle Pixel herausfinden, die nicht Grau sind.
                 bild[y,x]= [255,0,0, 255]
                 """#pixel1 = bildBW[y,x]
                 pixel2 = bildBW[y-1, x-1]
