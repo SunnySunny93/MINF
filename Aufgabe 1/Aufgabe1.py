@@ -27,8 +27,9 @@ def findeRGB(bild,bildBW):
     for y in range(height):
         for x in range(width):
             pixel=bild[y,x]
-            if pixel[0] != pixel[1]:
-                #pixel1 = bildBW[y,x]
+            if(pixel[0] != pixel[1] or pixel[0] != pixel[2] or pixel[1] != pixel[2]):
+                bild[y,x]= [255,0,0, 255]
+                """#pixel1 = bildBW[y,x]
                 pixel2 = bildBW[y-1, x-1]
                 #pixel3 = bildBW[y+1, x+1]
                 pixel4 = bildBW[y, x-1]
@@ -38,6 +39,6 @@ def findeRGB(bild,bildBW):
                 #pixel8 = bildBW[y-1, x+1]
                 #pixel9 = bildBW[y+1, x-1]
                 durchschnitt = (pixel2 + pixel4 + pixel6 )/3
-                bild[y,x]=durchschnitt
+                bild[y,x]=durchschnitt"""
     #plt.imshow(bild)        
 clean(eingangsbild, ausgangsbild)
