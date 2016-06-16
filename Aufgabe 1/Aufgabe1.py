@@ -17,6 +17,7 @@ def clean(eingangsbild, ausgangsbild):
     bild = np.array(Image.open(eingangsbild))
     bildBW = np.array(Image.open(eingangsbild).convert("L"))
     ermittelGrau(bildBW, findeRGB(bild, bildBW))
+    #findeRGB(bild,bildBW)
     plt.imshow(bildBW, cmap=cm.gray) 
     plt.imsave(ausgangsbild, bildBW, cmap =cm.gray)
     #plt.imshow(bildBW, cmap=cm.gray)
@@ -33,15 +34,22 @@ def findeRGB(bild,bildBW):
                 L = L + [[y,x]]            
     return L
 def ermittelGrau(bildBW, L):
+    height, width = bildBW.shape
     grau=0
-    werte=0
-    for i in range(len(L)):
-        y,x = L[i]
-        for i in range(-1,1):
+    for durchgaenge in range(10):
+        for i in range(len(L)):
+            y,x = L[i]
+            werte=0
             for j in range(-1,1):
-                if bildBW[y+i,x+j] != 0:
-                    grau = grau + bildBW[y+i,x+j]
-                    werte = werte +1
-        bildBW[y,x]=(grau/werte)
-    return bildBW
+                for k in range(-1,1):
+                    if((j != 0) & (k != 0) & (bildBW[y+j,x+k] != 0)):
+                        grau = grau + bildBW[y+j,x+k]
+                        werte = werte +1
+                        #print(werte)
+            bildBW[y,x]=((grau)//werte)
+
+
+
+
+
 clean(eingangsbild, ausgangsbild)
