@@ -8,11 +8,8 @@ Created on Tue Jun 21 11:12:52 2016
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from scipy.signal import convolve2d
 
-eingangsbild = r"000.png" #raw strings (verhindern Formatierung)
-ausgangsbild = "000.png"
+eingangsbild = r"067.png" #raw strings (verhindern Formatierung)
 
 def solve(eingangsbild):
     bild = np.array(Image.open(eingangsbild))
@@ -38,31 +35,62 @@ def ermittelInhalt(bildBW, bild):
                     farbe = bild[y,x]
                     pixel = farbe[0], farbe[1], farbe[2]
         I=I+[[i+1, anzahlpixel, pixel]]
-    print(I)
     return I
     
 def ermittelSpieler(I, bild):
     spielerA = []   #Alle Steine von A
     spielerB = []   #Alle Steine von B
+    felderA = []    #Nur die Felder
+    felderB = []    #Nur die Felder
+    leer=[]
     a=0
     for i in range(len(I)):
         feld, symbol, farbe = I[i]
         
+        if(symbol == 0):
+            leer = leer + [feld]
         if(a==0) & (symbol != 0):
             spielerA = spielerA +I[i]
-            aSymbol= spielerA[1]
-            r, g, b= spielerA[2]
-        #print(aSymbol)
+            aSymbol = spielerA[1]
+            r, g, b = spielerA[2]
+            felderA = felderA + [feld]
         if((a!=0)&(aSymbol==symbol)&(farbe[0]==r)&(farbe[1]==g)&(farbe[2]==b)):
             spielerA = spielerA + I[i]
+            felderA = felderA + [feld]
         else:
             if((a!=0)&(symbol != 0)&(farbe[0]!=r)):
                 spielerB = spielerB +I[i]
+                felderB = felderB + [feld]
         a = a + 1
-    gewinne(spielerA, spielerB)
-def gewinne(spielerA, spielerB):
-    if(len(spielerA))<(len(spielerB))):
+    zielkoord=gewinne(felderA, felderB, leer)
+    print(zielkoord)
+    
+def gewinne(felderA, felderB, leer):
+    if((len(felderA))<(len(felderB))):
+        zug = felderA
+    else:
+        zug = felderB
+    feld = loesung(zug, leer)
+    zeile = int((feld-1) % 3)
+    spalte = int((feld-1) // 3)
+    return(spalte+1, zeile+1)
     
     
-
+def loesung(zug, leer):
+    
+    diagonal = [[1,5,9],[3,5,7]]
+    horizontal = [[1,2,3],[4,5,6],[7,8,9]]
+    vertikal = [[1,4,7],[2,5,8],[3,6,9]]
+    
+    moeglichkeiten = diagonal + horizontal + vertikal
+    for j in range(len(leer)):
+        pruef = leer[j]
+        zuga = []
+        zuga = zug + [pruef]
+        for i in range(len(moeglichkeiten)):
+            pruef=moeglichkeiten[i]
+            if((pruef[0] in zuga) & (pruef[1] in zuga) & (pruef[2] in zuga)):
+                return(leer[j])
+                break
+    
 solve(eingangsbild)
