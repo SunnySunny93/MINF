@@ -9,7 +9,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-eingangsbild = r"067.png" #raw strings (verhindern Formatierung)
+eingangsbild = r"000.png" #raw strings (verhindern Formatierung)
 
 def solve(eingangsbild):
     bild = np.array(Image.open(eingangsbild))
@@ -46,7 +46,7 @@ def ermittelSpieler(I, bild):
     a=0
     for i in range(len(I)):
         feld, symbol, farbe = I[i]
-        
+        #print(I[i])
         if(symbol == 0):
             leer = leer + [feld]
         if(a==0) & (symbol != 0):
@@ -58,10 +58,12 @@ def ermittelSpieler(I, bild):
             spielerA = spielerA + I[i]
             felderA = felderA + [feld]
         else:
-            if((a!=0)&(symbol != 0)&(farbe[0]!=r)):
+            if((a!=0)&(symbol != 0)&(farbe[0]!=r)&(farbe[1]!=g)&(farbe[2]!=b)):
                 spielerB = spielerB +I[i]
                 felderB = felderB + [feld]
         a = a + 1
+    #print(spielerA)
+    #print(spielerB)
     zielkoord=gewinne(felderA, felderB, leer)
     print(zielkoord)
     
@@ -71,9 +73,9 @@ def gewinne(felderA, felderB, leer):
     else:
         zug = felderB
     feld = loesung(zug, leer)
-    zeile = int((feld-1) % 3)
-    spalte = int((feld-1) // 3)
-    return(spalte+1, zeile+1)
+    spalte = int((feld-1) % 3)
+    zeile = int((feld-1) // 3)
+    return(zeile+1, spalte+1)
     
     
 def loesung(zug, leer):
@@ -90,6 +92,7 @@ def loesung(zug, leer):
         for i in range(len(moeglichkeiten)):
             pruef=moeglichkeiten[i]
             if((pruef[0] in zuga) & (pruef[1] in zuga) & (pruef[2] in zuga)):
+                #print(leer[j])
                 return(leer[j])
                 break
     
