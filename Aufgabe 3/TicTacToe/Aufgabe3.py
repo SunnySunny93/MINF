@@ -9,7 +9,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-eingangsbild = r"000.png" #raw strings (verhindern Formatierung)
+eingangsbild = r"005.png" #raw strings (verhindern Formatierung)
 
 def solve(eingangsbild):
     bild = np.array(Image.open(eingangsbild))
@@ -18,6 +18,18 @@ def solve(eingangsbild):
     ermittelSpieler(inhalt, bild)
     plt.imshow(bild)    
     
+def hintergrundAngleichen(bildBW, bild):
+    height, width = bildBW.shape
+    for j in range(height):
+        for i in range(width):
+            farbe = bild[j,i]
+            if((farbe[0]>245) & (farbe[1]>245) & (farbe[2]>245)):
+                farbe[0] = 255
+                farbe[1] = 255
+                farbe[2] = 255
+                bild[j,i] = farbe[0],farbe[1],farbe[2], 255
+    plt.imsave("bild.png", bild)
+
 def ermittelInhalt(bildBW, bild):
     height, width = bildBW.shape
     drittelh = int(1/3*height)
@@ -28,12 +40,15 @@ def ermittelInhalt(bildBW, bild):
         h,b=L[i]
         anzahlpixel=0
         farbe=0
+        hintergrundAngleichen(bildBW, bild)
         for y in range(h+1,h + drittelh-1):             # +1 und -1 um die Linien auszuschließen
             for x in range(b+1, b + int(1/3*width)-1):
                 if(bildBW[y,x] != 255):
                     anzahlpixel= anzahlpixel + 1
+                    #print(anzahlpixel)
                     farbe = bild[y,x]
                     pixel = farbe[0], farbe[1], farbe[2]
+                    print(pixel)
         I=I+[[i+1, anzahlpixel, pixel]]
     return I
     
