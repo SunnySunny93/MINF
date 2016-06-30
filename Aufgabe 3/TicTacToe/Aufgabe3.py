@@ -9,7 +9,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-eingangsbild = r"005.png" #raw strings (verhindern Formatierung)
+eingangsbild = r"055.png" #raw strings (verhindern Formatierung)
 
 def solve(eingangsbild):
     bild = np.array(Image.open(eingangsbild))
@@ -48,7 +48,7 @@ def ermittelInhalt(bildBW, bild):
                     #print(anzahlpixel)
                     farbe = bild[y,x]
                     pixel = farbe[0], farbe[1], farbe[2]
-                    print(pixel)
+                    #print(pixel)
         I=I+[[i+1, anzahlpixel, pixel]]
     return I
     
