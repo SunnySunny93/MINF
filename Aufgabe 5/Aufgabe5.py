@@ -10,14 +10,17 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.signal import convolve2d
 
-matrix1 = [[1], [4], [3], [2]] 
-matrix2 = [[1], [2], [3], [4]]
+#matrix1 = [[1], [4], [3], [2]] 
+#matrix2 = [[1], [2], [3], [4]]
 
-#matrix1 = [[1, 2], [1], [2, 1], [3]
+#matrix1 = [[1, 2], [1], [2, 1], [3]]
 #matrix2 = [[1, 1], [2], [2, 1], [1, 2]]
 
 #matrix1=[[1], [1]]
 #matrix2=[[2], []]
+
+matrix1 = [[3], [1], [2], [1]]
+matrix2 = [[1, 1], [1], [1, 1], [1, 1]]
 
 def decode(matrix1, matrix2):
     spalten = len(matrix1)
@@ -28,21 +31,24 @@ def decode(matrix1, matrix2):
         a = np.zeros((spalten, spalten), dtype=np.int)
         #print(a)
         ganz(matrix1, matrix2, a)
-        n=spalten
-        f=0
-        for i in range(len(matrix1)):
-            if(i>1):
-                n=n -1
-                f = f + 1
-                fuellen(matrix1, matrix2, a, n, f)
-            print(f)
-            
+       
+        fuellen(matrix1, matrix2, a)
+        test(matrix1, matrix2, a)
         #abDrei(matrix1, matrix2, a)
         #abVier(matrix1, matrix2, a)  
         print(a)
         print(summe(a, spalten, spalten))
+        return (summe(a, spalten, spalten))
     else:
         print("Eingabefehler")
+  
+
+def test(mtarix1, matrix2, a):
+    print(len(matrix1[0]))
+    print(sum(matrix1[0])+((len(matrix1[0])-1)))
+    kuckuk= matrix1[0]
+    print(kuckuk[0])
+    print("summe", sum(a[0]))
     
 def ganz(matrix1, matrix2, a):
     spalten = len(matrix1)
@@ -53,31 +59,49 @@ def ganz(matrix1, matrix2, a):
                 a[j,i]=1
             if(spalten in matrix1[j]):
                 a[j,i]=1
+            if((len(matrix2[i])>1)&((sum(matrix2[i])+((len(matrix2[i])-1)))==spalten)):
+                b=matrix2[i]
+                if(b[0]>b[1]):
+                    for posi in range(b[0]):
+                        a[posi,i]=1
+                    a[spalten-1,i]=1
+                else:
+                    for posi in range(b[1]):
+                        a[spalten-1-posi,i]=1
+                    a[0,i]=1
+            if((len(matrix1[j])>1)&((sum(matrix1[j])+((len(matrix1[j])-1)))==spalten)):
+                b=matrix1[j]
+                if(b[0]>b[1]):
+                    for posi in range(b[0]):
+                        a[j,posi]=1
+                    a[j,spalten-1]=1
+                else:
+                    for posi in range(b[1]):
+                        a[j,spalten-1-posi]=1
+                    a[j,0]=1
                 
-def fuellen(matrix1, matrix2, a, n, f):
+def fuellen(matrix1, matrix2, a):
     spalten = len(matrix1)
-    b= n
-    for i in range(spalten):
-        for j in range(spalten):
-            if((n-f) in matrix2[i]):
-                if(a[0,i] == 1):
-                    for posi in range(b):
+    n=spalten
+    for do in range(n):
+        for i in range(spalten):
+            for j in range(spalten):
+                if((((len(matrix2[i]))==1))&((n) in matrix2[i])&(a[0,i] == 1)):
+                    for posi in range(n-1):
                         a[posi,i] = 1
-            if((n-f) in matrix2[i]):
-                if(a[n,i] == 1):
-                    for posi in range(b):
-                        a[n - (posi+1),i] = 1
-            if((n-f) in matrix1[j]):
-                if(a[j,0] == 1):
-                    for posi in range(b):
+                if((((len(matrix2[i]))==1))&((n) in matrix2[i])&(a[spalten-1,i] == 1)):
+                    for posi in range(n-1):
+                        a[spalten - 1 - (posi+1),i] = 1
+                if((((len(matrix1[j]))==1))&((n) in matrix1[j])&(a[j,0] == 1)):
+                    for posi in range(n-1):
                         a[j,posi] = 1
-            if((n-f) in matrix1[j]):
-                if(a[n,i] == 1):
-                    for posi in range(b):
-                        a[j, n - (posi+1)] = 1               
+                if((((len(matrix1[j]))==1))&((n) in matrix1[j])&(a[spalten-1,i] == 1)):
+                    for posi in range(n-1):
+                        a[j, spalten - 1 - (posi+1)] = 1  
+        n = n - 1
     
 
-def abVier(matrix1, matrix2, a):
+"""def abVier(matrix1, matrix2, a):
     spalten = len(matrix1)
     zeilen = len(matrix2)
     b = spalten -3
@@ -121,7 +145,7 @@ def abDrei(matrix1, matrix2, a):
             if((zeilen -1) in matrix1[j]):
                 if(a[zeilen-1,i] == 1):
                     for posi in range(b):
-                        a[j, zeilen - 1 - (posi+1)] = 1
+                        a[j, zeilen - 1 - (posi+1)] = 1"""
           
 def summe(a, spalten, zeilen):
     b = np.reshape(a,( 1, zeilen*spalten))

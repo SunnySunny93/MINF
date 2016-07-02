@@ -1,15 +1,100 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+
+def decode(matrix1, matrix2):
+    spalten = len(matrix1)
+    zeilen = len(matrix2)
+    if(spalten==zeilen):
+        a = np.zeros((spalten, spalten), dtype=np.int)
+
+        ganz(matrix1, matrix2, a)
+        fuellen(matrix1, matrix2, a)
+ 
+        #print(a)
+        
+        print(summe(a, spalten, spalten))
+        return (summe(a, spalten, spalten))
+    else:
+        print("Eingabefehler")
+
+def ganz(matrix1, matrix2, a):
+    spalten = len(matrix1)
+    for i in range(spalten):
+        for j in range(spalten):
+            #print(matrix1[i])
+            if(spalten in matrix2[i]):
+                a[j,i]=1
+            if(spalten in matrix1[j]):
+                a[j,i]=1
+            if((len(matrix2[i])>1)&((sum(matrix2[i])+((len(matrix2[i])-1)))==spalten)):
+                b=matrix2[i]
+                if(b[0]>b[1]):
+                    for posi in range(b[0]):
+                        a[posi,i]=1
+                    a[spalten-1,i]=1
+                else:
+                    for posi in range(b[1]):
+                        a[spalten-1-posi,i]=1
+                    a[0,i]=1
+            if((len(matrix1[j])>1)&((sum(matrix1[j])+((len(matrix1[j])-1)))==spalten)):
+                b=matrix1[j]
+                if(b[0]>b[1]):
+                    for posi in range(b[0]):
+                        a[j,posi]=1
+                    a[j,spalten-1]=1
+                else:
+                    for posi in range(b[1]):
+                        a[j,spalten-1-posi]=1
+                    a[j,0]=1
+                
+def fuellen(matrix1, matrix2, a):
+    spalten = len(matrix1)
+    n=spalten
+    for do in range(n):
+        for i in range(spalten):
+            for j in range(spalten):
+                if((((len(matrix2[i]))==1))&((n) in matrix2[i])&(a[0,i] == 1)):
+                    for posi in range(n-1):
+                        a[posi,i] = 1
+                if((((len(matrix2[i]))==1))&((n) in matrix2[i])&(a[spalten-1,i] == 1)):
+                    for posi in range(n-1):
+                        a[spalten - 1 - (posi+1),i] = 1
+                if((((len(matrix1[j]))==1))&((n) in matrix1[j])&(a[j,0] == 1)):
+                    for posi in range(n-1):
+                        a[j,posi] = 1
+                if((((len(matrix1[j]))==1))&((n) in matrix1[j])&(a[spalten-1,i] == 1)):
+                    for posi in range(n-1):
+                        a[j, spalten - 1 - (posi+1)] = 1  
+        n = n - 1
+
+def summe(a, spalten, zeilen):
+    b = np.reshape(a,( 1, zeilen*spalten))
+    r = b[0]
+    summe=0
+    for i in range(len(r)):
+        summe = summe + r[i]*2**i
+    return summe
+
+
+
+
+
 
 testSpecs = []
 
 # Programm zum Testen Ihrer Funktion "decode"
 def test (specs = testSpecs):
+    anzahl=0
+    fehler=0
     for n, rowSpec, colSpec in specs:
+        anzahl= anzahl + 1
         print(n, end = ": ")
         if decode(rowSpec, colSpec) != n:
+            fehler= fehler + 1
             print("Fehler!")
         else:
             print("OK")
+    print("Anzahl: ", anzahl, " Fehler: ", fehler)
 
 testSpecs = [
     (5, [[1], [1]], [[2], []]),
@@ -94,3 +179,5 @@ moreSpecs = [
     (3188175357875501851, [[2, 2], [2, 3, 1], [1, 1, 2], [3, 1, 1], [2, 1], [2, 1, 1], [5], [2, 1]], [[2, 1], [4, 1], [1, 3], [2, 4], [3, 1, 1], [1, 1, 3], [1], [5]]),
     (16103999649869894169, [[1, 2], [1, 1, 1], [1, 1], [1, 3], [2, 2, 1], [2, 3], [5], [5, 2]], [[1, 2, 1], [2, 2, 1], [3], [1, 1, 2], [2, 1, 2], [1, 2], [5], [3, 1, 1]])
 ]
+
+test(specs = testSpecs)
