@@ -28,11 +28,11 @@ def decode(matrix1, matrix2):
     if(spalten==zeilen):
         #print(matrix1)
         #print(matrix2)
-        a = np.zeros((spalten, spalten), dtype=np.int)
+        a = entscheide(matrix1,matrix2)
         #print(a)
         ganz(matrix1, matrix2, a)
        
-        fuellen(matrix1, matrix2, a)
+        einsenfuellen(matrix1, matrix2, a)
         test(matrix1, matrix2, a)
         #abDrei(matrix1, matrix2, a)
         #abVier(matrix1, matrix2, a)  
@@ -49,7 +49,21 @@ def test(mtarix1, matrix2, a):
     kuckuk= matrix1[0]
     print(kuckuk[0])
     print("summe", sum(a[0]))
-    
+   
+def entscheide(matrix1,matrix2):
+    a=0
+    b=0    
+    for i in range(len(matrix1)):
+        a= a + np.sum(matrix1[i])
+    for j in range(len(matrix2)):
+        b= b + np.sum(matrix2[j])
+    if(((a+b)/2)<=(((len(matrix1))*(len(matrix2)))/2)):
+        a = np.zeros((len(matrix1), len(matrix2)), dtype=np.int)
+        return a
+    else:
+        a = np.ones((len(matrix1), len(matrix2)), dtype=np.int)
+        return a
+   
 def ganz(matrix1, matrix2, a):
     spalten = len(matrix1)
     for i in range(spalten):
@@ -59,6 +73,8 @@ def ganz(matrix1, matrix2, a):
                 a[j,i]=1
             if(spalten in matrix1[j]):
                 a[j,i]=1
+                
+            #(2,1) oder (1,2)
             if((len(matrix2[i])>1)&((sum(matrix2[i])+((len(matrix2[i])-1)))==spalten)):
                 b=matrix2[i]
                 if(b[0]>b[1]):
@@ -69,6 +85,7 @@ def ganz(matrix1, matrix2, a):
                     for posi in range(b[1]):
                         a[spalten-1-posi,i]=1
                     a[0,i]=1
+            #(2,1) oder (1,2)
             if((len(matrix1[j])>1)&((sum(matrix1[j])+((len(matrix1[j])-1)))==spalten)):
                 b=matrix1[j]
                 if(b[0]>b[1]):
@@ -80,7 +97,7 @@ def ganz(matrix1, matrix2, a):
                         a[j,spalten-1-posi]=1
                     a[j,0]=1
                 
-def fuellen(matrix1, matrix2, a):
+def einsenfuellen(matrix1, matrix2, a):
     spalten = len(matrix1)
     n=spalten
     for do in range(n):
@@ -99,7 +116,26 @@ def fuellen(matrix1, matrix2, a):
                     for posi in range(n-1):
                         a[j, spalten - 1 - (posi+1)] = 1  
         n = n - 1
-    
+  
+def nullenfuellen(matrix1, matrix2, a):
+    spalten = len(matrix1)
+    n=spalten
+    for do in range(n):
+        for i in range(spalten):
+            for j in range(spalten):
+                if((((len(matrix2[i]))==0))&((n) in matrix2[i])&(a[0,i] == 0)):
+                    for posi in range(n-1):
+                        a[posi,i] = 0
+                if((((len(matrix2[i]))==0))&((n) in matrix2[i])&(a[spalten-1,i] == 0)):
+                    for posi in range(n-1):
+                        a[spalten - 1 - (posi+1),i] = 0
+                if((((len(matrix1[j]))==0))&((n) in matrix1[j])&(a[j,0] == 0)):
+                    for posi in range(n-1):
+                        a[j,posi] = 0
+                if((((len(matrix1[j]))==0))&((n) in matrix1[j])&(a[spalten-1,i] == 0)):
+                    for posi in range(n-1):
+                        a[j, spalten - 1 - (posi+1)] = 0
+        n = n - 1  
 
 """def abVier(matrix1, matrix2, a):
     spalten = len(matrix1)
