@@ -6,12 +6,11 @@ def decode(matrix1, matrix2):
     zeilen = len(matrix2)
     if(spalten==zeilen):
         a=np.full((spalten,zeilen), -1, dtype=int)
-        for i in range(spalten):
-            for j in range(spalten):
-                if(a[j,i]==-1):
-                    eindeutig(matrix1, matrix2, a)
-                if(a[j,i]==-1):
-                    weiter(matrix1, matrix2, a)
+ 
+        
+        for n in range(5):
+            eindeutig(matrix1, matrix2, a)
+            weiter(matrix1, matrix2, a)
        
         #print(a)
         print(summe(a, spalten, spalten))
@@ -20,6 +19,7 @@ def decode(matrix1, matrix2):
         print("Eingabefehler")
 
 def eindeutig(matrix1, matrix2, a):
+    #print("Eindeutig")    
     spalten = len(matrix1)
     #füllen
     for i in range(spalten):
@@ -56,18 +56,17 @@ def eindeutig(matrix1, matrix2, a):
                     for posi in range(b[1]):
                         a[j,spalten-1-posi]=1
                     a[j,0]=1
-            if(matrix2[i]==[1,1]):
-                for j in range(spalten):
-                    if((a[j,i]==1)&(j<=spalten-2)):
-                        a[j+1,i]=0
-                    if((a[j,i]==1)&(j>1)):
-                        a[j-1,i]=0
-                                    
+                    
+            
+    #print("Eindeutig:")
     pruefen(matrix1, matrix2, a)
+    
 def weiter(matrix1, matrix2, a):
+    #print(a,"blubb")
+    #print("weiter")
     #Spalten -1 bis 0 +1 mit einsen füllen
     spalten = len(matrix1)
-    n=spalten
+    """n=spalten
     for do in range(n):
         for i in range(spalten):
             for j in range(spalten):
@@ -87,7 +86,9 @@ def weiter(matrix1, matrix2, a):
                     for posi in range(n-1):
                         if(a[j, spalten - 1 - (posi+1)]!=0):
                             a[j, spalten - 1 - (posi+1)] = 1  
-        n = n - 1     
+        n = n - 1"""
+    #print(a)
+    #print("Weiter1")
     pruefen(matrix1, matrix2, a)
     #Passt eine Kette in die Felder, wenn nicht Nullen setzen
     for i in range(spalten):
@@ -97,27 +98,78 @@ def weiter(matrix1, matrix2, a):
                     d=n
                     #print(d)
                     if(d in matrix2[i]):
-                        a[0+(d-1), i]=1
-                        a[spalten-(d), i]=1  
+                        if(a[0+(d-1), i]==-1):
+                            a[0+(d-1), i]=1
+                        if(a[spalten-(d), i]==-1):
+                            a[spalten-(d), i]=1  
                     if(d in matrix1[j]):
-                        a[j, 0+(d-1)]=1
-                        a[j, spalten-(d)]=1
+                        if(a[j, 0+(d-1)]==-1):
+                            a[j, 0+(d-1)]=1
+                        if(a[j, spalten-(d)]==-1):
+                            a[j, spalten-(d)]=1
+    #print("Weiter2")
     pruefen(matrix1, matrix2, a)
-    for i in range(spalten):
+    
+    """for i in range(spalten):
         for j in range(spalten):
-            n= spalten//2
-            if(n in matrix2[i]):
-                for j in range(spalten-1):
-                    if(a[j,i]!=1 & a[j+1,i]!=1):
-                        a[j,i]=0
-            if(n in matrix1[j]):
-                for i in range(spalten-1):
-                    if(a[j,i]!=1 & a[j,i+1]!=1):
-                        a[j,i]=0
-    pruefen(matrix1, matrix2, a)
+            n=spalten//2
+            if(matrix2[i]==n):
+                for j in range(spalten):
+                    if(a[i,j]==1):
+                        
+            if(matrix1[j]==n):"""
             
+    for i in range(spalten):
+        n= spalten//2
+        if(n in matrix2[i]):
+            for j in range(spalten-1):
+                if(a[j,i]!=1 & a[j+1,i]!=1):
+                    if(a[j,i]==-1):
+                        a[j,i]=0
+    for j in range(spalten):
+        n= spalten//2
+        if(n in matrix1[j]):
+            for i in range(spalten-1):
+                if(a[j,i]!=1 & a[j,i+1]!=1):
+                    if(a[j,i]==-1):
+                        a[j,i]=0
+    
+    
+    
+    pruefen(matrix1, matrix2, a)      
+    #print("B", a)
+    #print("weiter3")
+
+    #print(a,"blub")
+    #Zellen ausschließen
+    for i in range(spalten):
+        for j in range(spalten):      
+            if(((len(matrix2[i]))==1)&(a[j,i]==1)):
+                c= matrix2[i][0]
+                if((j-c)>=0):
+                    if(a[j-c,i]==-1):
+                        a[j-c,i]=0
+                if((j+c)<=spalten-1):
+                    if(a[j+c,i]==-1):
+                        a[j+c,i]=0
+                #print(b)
+            if(((len(matrix1[j]))==1)&(a[j,i]==1)):
+                b= matrix1[j][0]
+                if((i-b)>=0):
+                    if(a[j,i-b]==-1):
+                        a[j,i-b]=0
+                if((i+b)<=spalten-1):
+                    if(a[j,i+b]==-1):
+                        a[j,i+b]=0
+                    #print(c)              
+    #print("Weiter4")
+    #print("a",a)         
+    pruefen(matrix1, matrix2, a)
+     
+    
 def pruefen(matrix1, matrix2, a):
     spalten = len(matrix1)
+    #print("Prüfen")    
     #Kontrolle ob genug Einsen da sind
     #|
     #v
@@ -142,6 +194,7 @@ def pruefen(matrix1, matrix2, a):
                 for i in range(spalten):
                     if(a[j,i]==-1):
                         a[j,i]=0
+        
     #Kontrolle ob genug Nullen da sind
     #|
     #v
@@ -161,12 +214,38 @@ def pruefen(matrix1, matrix2, a):
         for i in range(spalten):  
             if(a[j,i]==0):
                 b= b+1
+            #print(b,"==",spalten-sum(matrix1[j]))
             if(b==spalten-sum(matrix1[j])):
                 #print("True")
                 for i in range(spalten):
                     if(a[j,i]==-1):
                         a[j,i]=1
-    #print(a)
+    
+    for i in range(spalten):
+        for j in range(spalten):
+            if(matrix2[i]==[1,1]):
+                #print("(1,1)")
+                if(a[0,i]==1):
+                    a[1,i]=0
+                if(a[spalten-1,i]==1):
+                    a[spalten-2,i]=0
+                if(a[j,i]==1):
+                    if((j-1)>=0):
+                        a[j-1,i]=0
+                    if((j+1)<=spalten-1):
+                        a[j+1,i]=0
+            if(matrix1[j]==[1,1]):
+                #print("(1,1)")
+                if(a[j,0]==1):
+                    a[j,1]=0
+                if(a[j,spalten-1]==1):
+                    a[j,spalten-2]=0
+                if(a[j,i]==1):
+                    if((i-1)>=0):
+                        a[j,i-1]=0
+                    if((i+1)<=spalten-1):
+                        a[j,i+1]=0
+   
        
 def summe(a, spalten, zeilen):
     b = np.reshape(a,( 1, zeilen*spalten))
@@ -175,7 +254,6 @@ def summe(a, spalten, zeilen):
     for i in range(len(r)):
         summe = summe + r[i]*2**i
     return summe
-
 
 
 
